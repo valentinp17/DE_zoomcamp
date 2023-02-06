@@ -7,13 +7,13 @@ prefect deployment build ./etl_web_to_local.py:etl_web_to_local -n "ETL From web
 0 5 1 * *
 
 Q3:
-???
+14,851,920
 
 Q4:
-???
+88,605
 
 Q5:
-???
+514,392
 
 Q6:
-???
+8

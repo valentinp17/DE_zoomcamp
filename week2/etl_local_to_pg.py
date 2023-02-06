@@ -22,15 +22,20 @@ def transform(path: Path) -> pd.DataFrame:
     return df
 
 
-@task()
+@task(log_prints=True)
 def write_to_postgres(df: pd.DataFrame) -> None:
     """Write DataFrame to Postgres"""
     engine = sqlalchemy.create_engine("postgresql://root:root@localhost/ny_taxi")
-    df.to_sql('rides',
-              engine,
-              chunksize=50_000,
-              if_exists='append',
-              index=False)
+    chunksize = 100_000
+    iters = len(df) // chunksize
+    for i in range(0, iters, 1):
+        left = i * chunksize
+        right = left + chunksize
+        df[left:right].to_sql('rides',
+                            engine,
+                            if_exists='append',
+                            index=False)
+        print(f"chunk from {left} to {right} loaded")
 
 
 @flow(log_prints=True)
